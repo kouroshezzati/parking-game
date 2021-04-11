@@ -1,0 +1,11 @@
+.square {
+  height: 100px;
+  width: 100px;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+}
+
+#parking-wrapper {
+  display: grid;
+  grid-template-columns: min-content min-content min-content min-content min-content min-content;
+}
