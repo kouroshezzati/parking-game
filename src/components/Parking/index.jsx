@@ -2,27 +2,34 @@ import CellComponent from '../Cell/index';
 import { StyledParking } from './StyledParking';
 import { PARKING_HEIGHT, PARKING_WIDTH } from '../../constants';
 
-import './style.css';
+import CarComponent from '../Car';
 
 const ParkingComponent = () => {
   const cells = createCells();
   return (
     <StyledParking>
       {cells.map((row, colIndex) => (
-        <div key={colIndex}>
+        <div style={{ height: '102px' }} key={colIndex}>
           {row.map((cell, rowIndex) => (
             <CellComponent key={rowIndex} {...cell} />
           ))}
         </div>
       ))}
+      <CarComponent col={1} row={0} size={2} direction="H" selected={true} />
     </StyledParking>
   );
 };
 
 const createCells = () => {
-  return Array.from(Array(PARKING_HEIGHT), () => {
-    return new Array(PARKING_WIDTH).fill({ occupied: false });
-  });
+  let rows = [];
+  for (let i = 0; i < PARKING_HEIGHT; ++i) {
+    let cols = [];
+    for (let j = 0; j < PARKING_WIDTH; ++j) {
+      cols.push({ col: j, row: i, occupied: false });
+    }
+    rows.push(cols);
+  }
+  return rows;
 };
 
 export default ParkingComponent;
