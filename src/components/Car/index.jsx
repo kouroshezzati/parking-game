@@ -1,10 +1,23 @@
+import { useDispatch, useSelector } from 'react-redux';
 import TwoHBlack from '../../assets/images/cars/2-black.png';
 import TwoHRed from '../../assets/images/cars/2-red.png';
+import { SELECT_CAR } from '../../constants';
 import StyledCar from './StyledCar';
 
 const CarComponent = (props) => {
+  const { name } = props;
   let images = { black: TwoHBlack, red: TwoHRed };
-  return <StyledCar {...props} src={images[props.name]}></StyledCar>;
+  const dispatch = useDispatch();
+  const car = useSelector((state) =>
+    state.cars.find((car) => car.name === name)
+  );
+  return (
+    <StyledCar
+      onClick={() => dispatch({ name, type: SELECT_CAR })}
+      {...car}
+      src={images[name]}
+    ></StyledCar>
+  );
 };
 
 export default CarComponent;

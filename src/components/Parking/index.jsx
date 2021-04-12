@@ -1,8 +1,8 @@
 import CellComponent from '../Cell/index';
 import { StyledParking } from './StyledParking';
-import { PARKING_HEIGHT, PARKING_WIDTH } from '../../constants';
+import CarListComponent from './CarList';
 
-import CarComponent from '../Car';
+import { PARKING_HEIGHT, PARKING_WIDTH } from '../../constants';
 
 const ParkingComponent = () => {
   const cells = createCells();
@@ -15,22 +15,7 @@ const ParkingComponent = () => {
           ))}
         </div>
       ))}
-      <CarComponent
-        name="black"
-        col={1}
-        row={0}
-        size={2}
-        direction="H"
-        selected={true}
-      />
-      <CarComponent
-        name="red"
-        col={5}
-        row={4}
-        size={2}
-        direction="H"
-        selected={true}
-      />
+      <CarListComponent />
     </StyledParking>
   );
 };
