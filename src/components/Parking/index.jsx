@@ -15,7 +15,22 @@ const ParkingComponent = () => {
           ))}
         </div>
       ))}
-      <CarComponent col={1} row={0} size={2} direction="H" selected={true} />
+      <CarComponent
+        name="black"
+        col={1}
+        row={0}
+        size={2}
+        direction="H"
+        selected={true}
+      />
+      <CarComponent
+        name="red"
+        col={5}
+        row={4}
+        size={2}
+        direction="H"
+        selected={true}
+      />
     </StyledParking>
   );
 };
