@@ -5,6 +5,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store'
+import { ADD_CAR } from './constants';
+
+store.dispatch({ type: ADD_CAR, car: { name: 'black', size: 2, direction: 'H', col: 4, row: 5 } });
+store.dispatch({ type: ADD_CAR, car: { name: 'red', size: 2, direction: 'H', col: 2, row: 2 } });
 
 ReactDOM.render(
   <React.StrictMode>
