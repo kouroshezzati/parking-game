@@ -1,11 +1,10 @@
 import CellComponent from '../Cell/index';
 import { StyledParking } from './StyledParking';
 import CarListComponent from './CarList';
-
-import { PARKING_HEIGHT, PARKING_WIDTH } from '../../constants';
+import { useSelector } from 'react-redux';
 
 const ParkingComponent = () => {
-  const cells = createCells();
+  const cells = useSelector((state) => state.cells);
   return (
     <StyledParking>
       {cells.map((row, colIndex) => (
@@ -18,18 +17,6 @@ const ParkingComponent = () => {
       <CarListComponent />
     </StyledParking>
   );
-};
-
-const createCells = () => {
-  let rows = [];
-  for (let i = 0; i < PARKING_HEIGHT; ++i) {
-    let cols = [];
-    for (let j = 0; j < PARKING_WIDTH; ++j) {
-      cols.push({ col: j, row: i, occupied: false });
-    }
-    rows.push(cols);
-  }
-  return rows;
 };
 
 export default ParkingComponent;
