@@ -52,7 +52,9 @@ const cellsInitialState = createCells();
 export const cellReducer = (state = cellsInitialState, action) => {
   switch (action.type) {
     case ADD_CAR:
-      const cells = state.slice();
+      //deep copy because type of entities are objcet which 
+      //will be referenced when assigning by shallow copy 
+      const cells = state.map(row => row.map(col => ({ ...col })));
       const { row, col, size, direction } = action.car;
       if (direction === 'H') {
         for (let i = 0; i < size; ++i) {
@@ -63,6 +65,7 @@ export const cellReducer = (state = cellsInitialState, action) => {
           cells[row + i][col].occupied = true;
         }
       }
+      return cells;
     case INITIAL_CELLS: return state;
     default: return state;
   }

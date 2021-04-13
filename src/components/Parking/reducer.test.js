@@ -34,7 +34,6 @@ describe('Testing the cells reducer', () => {
     const result = cellReducer(undefined, { type: ADD_CAR, car });
     cells[1][0].occupied = true;
     cells[1][1].occupied = true;
-    console.log(result);
     expect(cells).toEqual(result);
 
   })
