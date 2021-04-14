@@ -11,6 +11,7 @@ const CarComponent = (props) => {
   const car = useSelector((state) =>
     state.cars.find((car) => car.name === name)
   );
+  console.log('aaaaaaaaaa')
   return (
     <StyledCar
       onClick={() => dispatch({ name, type: TOGGLE_CAR })}

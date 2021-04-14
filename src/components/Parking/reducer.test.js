@@ -18,6 +18,14 @@ describe('Testing the car reducer', () => {
     const car = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
     const result = carReducer([], { type: ADD_CAR, car });
     expect(result).toEqual([car]);
+  });
+
+  it('should move up the car row', () => {
+    const car = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
+    const addedCarresult = carReducer([], { type: ADD_CAR, car });
+    const selectedCarResult = carReducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
+    const moveCarResult = carReducer(selectedCarResult, { type: MOVE_UP, car });
+    expect(moveCarResult[0].row).toBe(0);
   })
 });
 

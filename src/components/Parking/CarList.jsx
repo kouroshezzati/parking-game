@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { MOVE_UP } from '../../constants';
 
 import CarComponent from '../Car';
 import useKeyPress from './useKeyPress';
@@ -8,10 +9,13 @@ const CarListComponent = () => {
   const cars = useSelector((state) => {
     return state.cars;
   });
-
+  const dispatch = useDispatch();
   useKeyPress((e) => {
     const dir = e.key.replace('Arrow', '').toLowerCase();
-    console.log(dir);
+    const car = cars.find((car) => car.selected === true);
+    if (dir === 'up') {
+      dispatch({ type: MOVE_UP, car });
+    }
   });
 
   return (

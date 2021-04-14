@@ -2,7 +2,7 @@ import { TOGGLE_CAR, INITIAL_CELLS, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE
 
 export const carReducer = (state = [], action) => {
   switch (action.type) {
-    case TOGGLE_CAR:
+    case TOGGLE_CAR: {
       const cars = state.map(car => {
         if (car.name === action.name) {
           car.selected = !car.selected;
@@ -12,7 +12,8 @@ export const carReducer = (state = [], action) => {
         return car;
       });
       return cars;
-    case ADD_CAR:
+    }
+    case ADD_CAR: {
       const { car } = action;
       const { col, row, direction, size } = car;
       if (col === null || col === undefined ||
@@ -30,10 +31,29 @@ export const carReducer = (state = [], action) => {
         }
       }
       return [...state, car];
+    }
+    case MOVE_UP: {
+      //check is there any car with the same col and row
+      if (isCarExist(state, { ...action.car, row: action.car.row - 1 })) {
+        return state;
+      }
+      let cars = state.map(car => {
+        return Object.assign({}, car);
+      });
+      cars.forEach(car => {
+        if (car.selected && car.row > 0) {
+          car.row -= 1;
+        }
+      })
+      return cars;
+    }
     default: return state
   }
 }
 
+function isCarExist(cars, car) {
+  return cars.some(_car => _car.col === car.col && _car.row === car.row);
+}
 
 export const createCells = () => {
   let rows = [];
