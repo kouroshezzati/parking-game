@@ -1,4 +1,4 @@
-import { ADD_CAR, INITIAL_CELLS, MOVE_DOWN, MOVE_UP, TOGGLE_CAR } from '../../constants';
+import { ADD_CAR, INITIAL_CELLS, MOVE_DOWN, MOVE_LEFT, MOVE_UP, TOGGLE_CAR } from '../../constants';
 import reducer, { createCells } from './reducers';
 
 describe('Testing the reducer', () => {
@@ -73,7 +73,7 @@ describe('Testing the reducer', () => {
     expect(movedUpResult.cells[1][1].occupied).toBeTruthy();
   });
 
-  
+
   it('should move down the car row', () => {
     const car = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
     const addedCarresult = reducer(undefined, { type: ADD_CAR, car });
@@ -109,5 +109,26 @@ describe('Testing the reducer', () => {
     expect(movedUpResult).toEqual(addedBlackCarResult);
     expect(movedUpResult.cells[0][0].occupied).toBeTruthy();
     expect(movedUpResult.cells[0][1].occupied).toBeTruthy();
+  });
+
+  
+  it('should move the car to the left', () => {
+    const car = { name: 'red', size: 2, direction: 'H', col: 1, row: 1 };
+    const addedCarresult = reducer(undefined, { type: ADD_CAR, car });//[1,1], [1,2]
+    const selectedCarResult = reducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
+    const moveCarResult = reducer(selectedCarResult, { type: MOVE_LEFT, car });//[0,1], [1,1]
+    expect(moveCarResult.cells[1][0].occupied).toBeTruthy();
+    expect(moveCarResult.cells[1][1].occupied).toBeTruthy();
+    expect(moveCarResult.cars[0].col).toBe(0);
+  });
+  
+  it('should move the verticatl car to the left', () => {
+    const car = { name: 'red', size: 2, direction: 'V', col: 1, row: 1 };
+    const addedCarresult = reducer(undefined, { type: ADD_CAR, car });//[1,1], [2,1]
+    const selectedCarResult = reducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
+    const moveCarResult = reducer(selectedCarResult, { type: MOVE_LEFT, car });//[1,0], [2,0]
+    expect(moveCarResult.cells[1][0].occupied).toBeTruthy();
+    expect(moveCarResult.cells[2][0].occupied).toBeTruthy();
+    expect(moveCarResult.cars[0].col).toBe(0);
   });
 })

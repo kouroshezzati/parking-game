@@ -1,4 +1,4 @@
-import { TOGGLE_CAR, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP, MOVE_DOWN } from "../../constants";
+import { TOGGLE_CAR, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP, MOVE_DOWN, MOVE_LEFT } from "../../constants";
 
 
 export const createCells = () => {
@@ -127,6 +127,43 @@ const reducer = (state = { cars: [], cells: cellsInitialState }, action) => {
       cars.forEach(car => {
         if (car.selected) {
           car.row += 1;
+        }
+      })
+      return { ...state, cars, cells }
+    }
+    case MOVE_LEFT: {
+      let cells = cellsDeepCopy(state.cells);
+      let cars = carsDeepCopy(state.cars);
+
+      const { row, col, size, direction } = action.car;
+      if (row === undefined || col === undefined || col < 1 || size === undefined ||
+        (direction !== 'H' && direction !== 'V')) {
+        return state;
+      }
+
+      for (let i = col; i < col + size; ++i) {
+        if (direction === 'H') {
+          if (cells[row][i - 1].occupied) {
+            return state;
+          }
+          cells[row][i].occupied = false;
+          cells[row][i - 1].occupied = true;
+        }
+      }
+
+      for (let i = 0; i < size; ++i) {
+        if (direction === 'V') {
+          if (cells[row + i][col - 1].occupied) {
+            return state;
+          }
+          cells[row + i][col].occupied = false;
+          cells[row + i][col - 1].occupied = true;
+        }
+      }
+
+      cars.forEach(car => {
+        if (car.selected) {
+          car.col -= 1;
         }
       })
       return { ...state, cars, cells }
