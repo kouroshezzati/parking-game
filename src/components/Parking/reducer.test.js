@@ -1,4 +1,4 @@
-import { ADD_CAR, INITIAL_CELLS, MOVE_UP, TOGGLE_CAR } from '../../constants';
+import { ADD_CAR, INITIAL_CELLS, MOVE_DOWN, MOVE_UP, TOGGLE_CAR } from '../../constants';
 import reducer, { createCells } from './reducers';
 
 describe('Testing the reducer', () => {
@@ -42,7 +42,6 @@ describe('Testing the reducer', () => {
     const addedCarresult = reducer(undefined, { type: ADD_CAR, car });
     const selectedCarResult = reducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
     const moveCarResult = reducer(selectedCarResult, { type: MOVE_UP, car });
-    console.log(moveCarResult);
     expect(moveCarResult.cars[0].row).toBe(0);
   });
 
@@ -72,5 +71,43 @@ describe('Testing the reducer', () => {
     expect(movedUpResult).toEqual(addedBlackCarResult);
     expect(movedUpResult.cells[1][0].occupied).toBeTruthy();
     expect(movedUpResult.cells[1][1].occupied).toBeTruthy();
+  });
+
+  
+  it('should move down the car row', () => {
+    const car = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
+    const addedCarresult = reducer(undefined, { type: ADD_CAR, car });
+    const selectedCarResult = reducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
+    const moveCarResult = reducer(selectedCarResult, { type: MOVE_DOWN, car });
+    expect(moveCarResult.cars[0].row).toBe(2);
+  });
+  
+  it('should occupied cells in below row and release current row', () => {
+    const car = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
+    const cellAddCarResult = reducer(undefined, { type: ADD_CAR, car });
+    const movedDownResult = reducer(cellAddCarResult, { type: MOVE_DOWN, car });
+    expect(movedDownResult.cells[2][0].occupied).toBeTruthy();
+    expect(movedDownResult.cells[2][1].occupied).toBeTruthy();
+  });
+  
+
+  it('should move down for vertical direction car', () => {
+    const car = { name: 'red', size: 2, direction: 'V', col: 0, row: 2 };//[2,0],[3,0]
+    const cellAddCarResult = reducer(undefined, { type: ADD_CAR, car });
+    const movedDownResult = reducer(cellAddCarResult, { type: MOVE_DOWN, car });//[3,0],[4,0]
+    expect(movedDownResult.cells[3][0].occupied).toBeTruthy();
+    expect(movedDownResult.cells[4][0].occupied).toBeTruthy();
+  });
+
+  it('should not move the car because there is one under it', () => {
+    const blackCar = { name: 'black', size: 2, direction: 'H', col: 0, row: 0 };
+    const redCar = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
+    const addedRedCarResult = reducer(undefined, { type: ADD_CAR, car: redCar });
+    const addedBlackCarResult = reducer(addedRedCarResult, { type: ADD_CAR, car: blackCar });
+    const movedUpResult = reducer(addedBlackCarResult, { type: MOVE_DOWN, car: blackCar });
+
+    expect(movedUpResult).toEqual(addedBlackCarResult);
+    expect(movedUpResult.cells[0][0].occupied).toBeTruthy();
+    expect(movedUpResult.cells[0][1].occupied).toBeTruthy();
   });
 })

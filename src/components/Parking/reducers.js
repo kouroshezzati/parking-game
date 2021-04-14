@@ -1,4 +1,4 @@
-import { TOGGLE_CAR, INITIAL_CELLS, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP } from "../../constants";
+import { TOGGLE_CAR, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP, MOVE_DOWN } from "../../constants";
 
 
 export const createCells = () => {
@@ -16,7 +16,7 @@ export const createCells = () => {
 
 const cellsInitialState = createCells();
 
-export default (state = { cars: [], cells: cellsInitialState }, action) => {
+const reducer = (state = { cars: [], cells: cellsInitialState }, action) => {
   switch (action.type) {
     case TOGGLE_CAR: {
       const cars = state.cars.map(car => {
@@ -62,9 +62,7 @@ export default (state = { cars: [], cells: cellsInitialState }, action) => {
     }
     case MOVE_UP: {
       let cells = cellsDeepCopy(state.cells);
-      let cars = state.cars.map(car => {
-        return Object.assign({}, car);
-      });
+      let cars = carsDeepCopy(state.cars);
 
       const { row, col, size, direction } = action.car;
       if (!row || col === undefined || size === undefined ||
@@ -95,6 +93,44 @@ export default (state = { cars: [], cells: cellsInitialState }, action) => {
       })
       return { ...state, cars, cells }
     }
+    case MOVE_DOWN: {
+      let cells = cellsDeepCopy(state.cells);
+      let cars = carsDeepCopy(state.cars);
+
+      const { row, col, size, direction } = action.car;
+      if (row === undefined || row > 4 || col === undefined || size === undefined ||
+        (direction !== 'H' && direction !== 'V')) {
+        return state;
+      }
+
+      for (let i = 0; i < size; ++i) {
+        if (direction === 'H') {
+          if (cells[row + 1][col + i].occupied) {
+            return state;
+          }
+          cells[row][col + i].occupied = false;
+          cells[row + 1][col + i].occupied = true;
+        }
+      }
+
+      if (direction === 'V') {
+        let tail = row + size - 1;
+        for (let i = tail; i >= row; --i) {
+          if (cells[i + 1][col].occupied) {
+            return state;
+          }
+          cells[i][col].occupied = false;
+          cells[i + 1][col].occupied = true;
+        }
+      }
+
+      cars.forEach(car => {
+        if (car.selected) {
+          car.row += 1;
+        }
+      })
+      return { ...state, cars, cells }
+    }
     default: return state;
   }
 }
@@ -109,10 +145,4 @@ function carsDeepCopy(cars) {
   return cars.map(car => Object.assign({}, car));
 }
 
-function getSelectedCar(cars) {
-  cars.find(car => {
-    if (car.selected) {
-      return car;
-    }
-  })
-}
+export default reducer;

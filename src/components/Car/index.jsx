@@ -24,7 +24,6 @@ const CarComponent = (props) => {
     pink: TwoHPink,
     lightGreen: TwoHLightGreen,
     blue: ThreeHBlue,
-    red: TwoHRed,
     brown: TwoVBrown,
     orange: TwoVOrange,
     purple: TwoVPurple,
