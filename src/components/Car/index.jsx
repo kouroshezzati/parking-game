@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import TwoHBlack from '../../assets/images/cars/2-black.png';
 import TwoHRed from '../../assets/images/cars/2-red.png';
-import { SELECT_CAR } from '../../constants';
+import { TOGGLE_CAR } from '../../constants';
 import StyledCar from './StyledCar';
 
 const CarComponent = (props) => {
@@ -13,7 +13,7 @@ const CarComponent = (props) => {
   );
   return (
     <StyledCar
-      onClick={() => dispatch({ name, type: SELECT_CAR })}
+      onClick={() => dispatch({ name, type: TOGGLE_CAR })}
       {...car}
       src={images[name]}
     ></StyledCar>

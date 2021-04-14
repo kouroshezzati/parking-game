@@ -1,8 +1,8 @@
-import { SELECT_CAR, INITIAL_CELLS, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR } from "../../constants";
+import { TOGGLE_CAR, INITIAL_CELLS, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP } from "../../constants";
 
 export const carReducer = (state = [], action) => {
   switch (action.type) {
-    case SELECT_CAR:
+    case TOGGLE_CAR:
       const cars = state.map(car => {
         if (car.name === action.name) {
           car.selected = !car.selected;
@@ -52,9 +52,7 @@ const cellsInitialState = createCells();
 export const cellReducer = (state = cellsInitialState, action) => {
   switch (action.type) {
     case ADD_CAR:
-      //deep copy because type of entities are objcet which 
-      //will be referenced when assigning by shallow copy 
-      const cells = state.map(row => row.map(col => ({ ...col })));
+      let cells = cellsDeepCopy(state);
       const { row, col, size, direction } = action.car;
       if (direction === 'H') {
         for (let i = 0; i < size; ++i) {
@@ -67,6 +65,40 @@ export const cellReducer = (state = cellsInitialState, action) => {
       }
       return cells;
     case INITIAL_CELLS: return state;
+    case MOVE_UP: {
+      let cells = cellsDeepCopy(state);
+      const { row, col, size, direction } = action.car;
+      if (row === undefined || col === undefined || size === undefined || (direction !== 'H' && direction !== 'V')) {
+        return state;
+      }
+      if (direction === 'H') {
+        if (row === 0) {
+          return state;
+        }
+        for (let i = 0; i < size; ++i) {
+          if (cells[row - 1][col + i].occupied) {
+            return state;
+          }
+          cells[row][col + i].occupied = false;
+          cells[row - 1][col + i].occupied = true;
+        }
+      }
+      return cells;
+    }
     default: return state;
   }
+}
+
+//deep copy because type of entities are objcet which 
+//will be referenced when assigning by shallow copy 
+function cellsDeepCopy(cells) {
+  return cells.map(row => row.map(col => ({ ...col })));
+}
+
+function getSelectedCar(cars) {
+  cars.find(car => {
+    if (car.selected) {
+      return car;
+    }
+  })
 }
