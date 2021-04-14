@@ -54,6 +54,14 @@ describe('Testing the cells reducer', () => {
     expect(movedUpResult[0][1].occupied).toBeTruthy();
   });
 
+  it('should move up for vertical direction car', () => {
+    const car = { name: 'red', size: 2, direction: 'V', col: 0, row: 1 };//[1,0],[2,0]
+    const cellAddCarResult = cellReducer(undefined, { type: ADD_CAR, car });
+    const movedUpResult = cellReducer(cellAddCarResult, { type: MOVE_UP, car });//[0,0],[1,0]
+    expect(movedUpResult[0][0].occupied).toBeTruthy();
+    expect(movedUpResult[1][0].occupied).toBeTruthy();
+  });
+
   it('should not move the car because there is one upon it', () => {
     const redCar = { name: 'red', size: 2, direction: 'H', col: 0, row: 1 };
     const blackCar = { name: 'black', size: 2, direction: 'H', col: 0, row: 0 };

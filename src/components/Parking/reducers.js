@@ -91,16 +91,23 @@ export const cellReducer = (state = cellsInitialState, action) => {
       if (row === undefined || col === undefined || size === undefined || (direction !== 'H' && direction !== 'V')) {
         return state;
       }
-      if (direction === 'H') {
-        if (row === 0) {
-          return state;
-        }
-        for (let i = 0; i < size; ++i) {
+      if (row === 0) {
+        return state;
+      }
+
+      for (let i = 0; i < size; ++i) {
+        if (direction === 'H') {
           if (cells[row - 1][col + i].occupied) {
             return state;
           }
           cells[row][col + i].occupied = false;
           cells[row - 1][col + i].occupied = true;
+        } else if (direction === 'V') {
+          if (cells[row + i - 1][col].occupied) {
+            return state;
+          }
+          cells[row + i][col].occupied = false;
+          cells[row + i - 1][col].occupied = true;
         }
       }
       return cells;
