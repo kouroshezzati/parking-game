@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import TwoHBlack from '../../assets/images/cars/2-black.png';
 import TwoHGreen from '../../assets/images/cars/2-green.png';
+import TwoVDarkGreen from '../../assets/images/cars/2-v-dark-green.png';
 import TwoHGray from '../../assets/images/cars/2-gray.png';
 import TwoHPink from '../../assets/images/cars/2-pink.png';
 import TwoHLightGreen from '../../assets/images/cars/2-light-green.png';
@@ -20,6 +21,7 @@ const CarComponent = (props) => {
     black: TwoHBlack,
     red: TwoHRed,
     green: TwoHGreen,
+    darkGreen: TwoVDarkGreen,
     gray: TwoHGray,
     pink: TwoHPink,
     lightGreen: TwoHLightGreen,
