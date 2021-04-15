@@ -1,3 +1,7 @@
+# Game description
+For moving a car you need to select a car by clicking on the car that you want to move\
+then you can navigate the car by `Arrow keys`.\
+As mentioned in the test challenge description. by exit the red car the game is over. 
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
