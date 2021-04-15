@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MOVE_DOWN, MOVE_LEFT, MOVE_UP } from '../../constants';
+import { MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP } from '../../constants';
 
 import CarComponent from '../Car';
 import useKeyPress from './useKeyPress';
@@ -22,6 +22,9 @@ const CarListComponent = () => {
         break;
       case 'left':
         dispatch({ type: MOVE_LEFT, car });
+        break;
+      case 'right':
+        dispatch({ type: MOVE_RIGHT, car });
         break;
 
       default:
