@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 const ParkingComponent = () => {
   const cells = useSelector((state) => state.cells);
+  const win = useSelector((state) => state.win);
   return (
     <StyledParking>
       {cells.map((row, colIndex) => (
@@ -15,6 +16,9 @@ const ParkingComponent = () => {
         </div>
       ))}
       <CarListComponent />
+      {win && (
+        <div style={{ textAlign: 'center', padding: '10px' }}>You won</div>
+      )}
     </StyledParking>
   );
 };
