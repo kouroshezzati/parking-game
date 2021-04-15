@@ -16,7 +16,7 @@ export const createCells = () => {
 
 const cellsInitialState = createCells();
 
-const reducer = (state = { cars: [], cells: cellsInitialState }, action) => {
+const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, action) => {
   switch (action.type) {
     case TOGGLE_CAR: {
       const cars = state.cars.map(car => {
@@ -173,22 +173,43 @@ const reducer = (state = { cars: [], cells: cellsInitialState }, action) => {
       let cars = carsDeepCopy(state.cars);
 
       const { row, col, size, direction } = action.car;
-      if (row === undefined || col === undefined || col > 4 || size === undefined ||
-        (direction !== 'H' && direction !== 'V')) {
-        return state;
-      }
-
-      for (let tail = col + size - 1; tail >= col; --tail) {
-        if (direction === 'H') {
+      if (direction === 'H') {
+        if (row === undefined || col === undefined || col > 4 || size === undefined) {
+          return state;
+        }
+        //Winner senario
+        if (col === 4 && (row === 2 || row === 3)) {
+          cars = cars.filter(car => !car.selected);
+          for (let i = col; i <= size + col - 1; ++i) {
+            cells[row][i].occupied = false;
+          }
+          return { ...state, cells, cars, win: true };
+        }
+        //release cells
+        for (let tail = col + size - 1; tail >= col; --tail) {
           if (cells[row][tail + 1].occupied) {
             return state;
           }
           cells[row][tail].occupied = false;
           cells[row][tail + 1].occupied = true;
-        }
-      }
 
-      if (direction === 'V') {
+        }
+      } else if (direction === 'V') {
+        //Winner senario
+        if (col === 5 && (row === 2 || row === 3)) {
+          if (size >= 3) {
+            return state;
+          }
+          cars = cars.filter(car => !car.selected);
+          for (let i = 0; i < size; ++i) {
+            cells[row + i][col].occupied = false;
+          }
+          return { ...state, win: true, cars, cells }
+        }
+        //release cells
+        if (col === 5) {
+          return state;
+        }
         for (let i = 0; i < size; ++i) {
           if (cells[row + i][col + 1].occupied) {
             return state;

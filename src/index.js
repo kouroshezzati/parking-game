@@ -10,6 +10,7 @@ import { ADD_CAR } from './constants';
 store.dispatch({ type: ADD_CAR, car: { name: 'black', size: 2, direction: 'H', col: 4, row: 5 } });
 store.dispatch({ type: ADD_CAR, car: { name: 'red', size: 2, direction: 'H', col: 2, row: 2 } });
 store.dispatch({ type: ADD_CAR, car: { name: 'yellow', size: 3, direction: 'V', col: 4, row: 1 } });
+store.dispatch({ type: ADD_CAR, car: { name: 'orange', size: 2, direction: 'V', col: 2, row: 3 } });
 
 ReactDOM.render(
   <React.StrictMode>
