@@ -40,7 +40,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
     }
     case ADD_CAR: {
       let cells = cellsDeepCopy(state.cells);
-      if(!action.car){
+      if (!action.car) {
         return state;
       }
       const { row, col, size, direction } = action.car;
@@ -75,7 +75,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
     case MOVE_UP: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-      if(!action.car){
+      if (!action.car) {
         return state;
       }
       const { row, col, size, direction } = action.car;
@@ -110,7 +110,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
     case MOVE_DOWN: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-      if(!action.car){
+      if (!action.car) {
         return state;
       }
       const { row, col, size, direction } = action.car;
@@ -132,7 +132,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
       if (direction === 'V') {
         let tail = row + size - 1;
         for (let i = tail; i >= row; --i) {
-          if (cells[i + 1][col].occupied) {
+          if (!cells[i + 1] || cells[i + 1][col].occupied) {
             return state;
           }
           cells[i][col].occupied = false;
@@ -150,7 +150,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
     case MOVE_LEFT: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-      if(!action.car){
+      if (!action.car) {
         return state;
       }
       const { row, col, size, direction } = action.car;
@@ -189,7 +189,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
     case MOVE_RIGHT: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-      if(!action.car){
+      if (!action.car) {
         return state;
       }
       const { row, col, size, direction, name } = action.car;
@@ -198,7 +198,10 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
           return state;
         }
         //Winner senario
-        if (col === 4 && (row === 2 || row === 3)) {
+        if (
+          (col === 4 && (row === 2 || row === 3)) ||
+          ((size === 3 && col === 3) && (row === 2 || row === 3))
+        ) {
           cars = cars.filter(car => !car.selected);
           for (let i = col; i <= size + col - 1; ++i) {
             cells[row][i].occupied = false;

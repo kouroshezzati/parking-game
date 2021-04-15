@@ -5,5 +5,11 @@ export const StyledCell = styled.div`
   width: 100px;
   display: inline-block;
   border: 1px solid;
-  ${props => props.occupied ? { backgroundColor: 'gray' } : { backgroundColor: 'transparent' }}
+  ${props => {
+    const { occupied, row, col } = props;
+    return {
+      backgroundColor: occupied ? 'gray' : 'transparent',
+      border: (row === 2 || row == 3) && col === 5 ? 'unset' : '1px solid',
+    }
+  }}
 `
