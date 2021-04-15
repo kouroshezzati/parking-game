@@ -2,10 +2,13 @@ import CellComponent from '../Cell/index';
 import { StyledParking } from './StyledParking';
 import CarListComponent from './CarList';
 import { useSelector } from 'react-redux';
+import CounterComponent from './Counter';
 
 const ParkingComponent = () => {
   const cells = useSelector((state) => state.cells);
   const win = useSelector((state) => state.win);
+  const time = useSelector((state) => state.time);
+
   return (
     <StyledParking>
       {cells.map((row, colIndex) => (
@@ -17,8 +20,11 @@ const ParkingComponent = () => {
       ))}
       <CarListComponent />
       {win && (
-        <div style={{ textAlign: 'center', padding: '10px' }}>You won</div>
+        <h2 style={{ textAlign: 'center', padding: '10px' }}>
+          You won, your time is: {time}
+        </h2>
       )}
+      <CounterComponent />
     </StyledParking>
   );
 };

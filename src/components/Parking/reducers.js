@@ -1,4 +1,13 @@
-import { TOGGLE_CAR, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT } from "../../constants";
+import {
+  TOGGLE_CAR,
+  PARKING_HEIGHT,
+  PARKING_WIDTH,
+  ADD_CAR,
+  MOVE_UP,
+  MOVE_DOWN,
+  MOVE_LEFT,
+  MOVE_RIGHT, SAVE_COUNT
+} from "../../constants";
 
 
 export const createCells = () => {
@@ -16,7 +25,7 @@ export const createCells = () => {
 
 const cellsInitialState = createCells();
 
-const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, action) => {
+const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialState }, action) => {
   switch (action.type) {
     case TOGGLE_CAR: {
       const cars = state.cars.map(car => {
@@ -31,6 +40,9 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
     }
     case ADD_CAR: {
       let cells = cellsDeepCopy(state.cells);
+      if(!action.car){
+        return state;
+      }
       const { row, col, size, direction } = action.car;
       if (direction === 'H') {
         for (let i = 0; i < size; ++i) {
@@ -63,7 +75,9 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
     case MOVE_UP: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-
+      if(!action.car){
+        return state;
+      }
       const { row, col, size, direction } = action.car;
       if (!row || col === undefined || size === undefined ||
         (direction !== 'H' && direction !== 'V')) {
@@ -96,7 +110,9 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
     case MOVE_DOWN: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-
+      if(!action.car){
+        return state;
+      }
       const { row, col, size, direction } = action.car;
       if (row === undefined || row > 4 || col === undefined || size === undefined ||
         (direction !== 'H' && direction !== 'V')) {
@@ -134,7 +150,9 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
     case MOVE_LEFT: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-
+      if(!action.car){
+        return state;
+      }
       const { row, col, size, direction } = action.car;
       if (row === undefined || col === undefined || col < 1 || size === undefined ||
         (direction !== 'H' && direction !== 'V')) {
@@ -171,7 +189,9 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
     case MOVE_RIGHT: {
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
-
+      if(!action.car){
+        return state;
+      }
       const { row, col, size, direction, name } = action.car;
       if (direction === 'H') {
         if (row === undefined || col === undefined || col > 4 || size === undefined) {
@@ -226,8 +246,22 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
       })
       return { ...state, cars, cells }
     }
+    case SAVE_COUNT:
+      const { count } = action;
+      return { ...state, time: counterToTime(count) };
     default: return state;
   }
+}
+
+export function counterToTime(count) {
+  var hours = Math.floor(count / 3600);
+  var minutes = Math.floor((count - (hours * 3600)) / 60);
+  var seconds = count - (hours * 3600) - (minutes * 60);
+
+  if (hours < 10) { hours = "0" + hours; }
+  if (minutes < 10) { minutes = "0" + minutes; }
+  if (seconds < 10) { seconds = "0" + seconds; }
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 //deep copy because type of entities are objcet which 
