@@ -1,4 +1,4 @@
-import { ADD_CAR, INITIAL_CELLS, MOVE_DOWN, MOVE_LEFT, MOVE_UP, TOGGLE_CAR } from '../../constants';
+import { ADD_CAR, INITIAL_CELLS, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, TOGGLE_CAR } from '../../constants';
 import reducer, { createCells } from './reducers';
 
 describe('Testing the reducer', () => {
@@ -130,5 +130,26 @@ describe('Testing the reducer', () => {
     expect(moveCarResult.cells[1][0].occupied).toBeTruthy();
     expect(moveCarResult.cells[2][0].occupied).toBeTruthy();
     expect(moveCarResult.cars[0].col).toBe(0);
+  });
+
+    
+  it('should move the car to the right', () => {
+    const car = { name: 'red', size: 2, direction: 'H', col: 1, row: 1 };
+    const addedCarresult = reducer(undefined, { type: ADD_CAR, car });//[1,1], [1,2]
+    const selectedCarResult = reducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
+    const moveCarResult = reducer(selectedCarResult, { type: MOVE_RIGHT, car });//[1,2], [1,3]
+    expect(moveCarResult.cells[1][2].occupied).toBeTruthy();
+    expect(moveCarResult.cells[1][3].occupied).toBeTruthy();
+    expect(moveCarResult.cars[0].col).toBe(2);
+  });
+    
+  it('should move the verticatl car to the right', () => {
+    const car = { name: 'red', size: 2, direction: 'V', col: 1, row: 1 };
+    const addedCarresult = reducer(undefined, { type: ADD_CAR, car });//[1,1], [2,1]
+    const selectedCarResult = reducer(addedCarresult, { type: TOGGLE_CAR, name: car.name })
+    const moveCarResult = reducer(selectedCarResult, { type: MOVE_RIGHT, car });//[1,2], [2,2]
+    expect(moveCarResult.cells[1][2].occupied).toBeTruthy();
+    expect(moveCarResult.cells[2][2].occupied).toBeTruthy();
+    expect(moveCarResult.cars[0].col).toBe(2);
   });
 })

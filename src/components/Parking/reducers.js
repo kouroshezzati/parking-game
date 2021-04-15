@@ -1,4 +1,4 @@
-import { TOGGLE_CAR, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP, MOVE_DOWN, MOVE_LEFT } from "../../constants";
+import { TOGGLE_CAR, PARKING_HEIGHT, PARKING_WIDTH, ADD_CAR, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT } from "../../constants";
 
 
 export const createCells = () => {
@@ -151,8 +151,8 @@ const reducer = (state = { cars: [], cells: cellsInitialState }, action) => {
         }
       }
 
-      for (let i = 0; i < size; ++i) {
-        if (direction === 'V') {
+      if (direction === 'V') {
+        for (let i = 0; i < size; ++i) {
           if (cells[row + i][col - 1].occupied) {
             return state;
           }
@@ -164,6 +164,43 @@ const reducer = (state = { cars: [], cells: cellsInitialState }, action) => {
       cars.forEach(car => {
         if (car.selected) {
           car.col -= 1;
+        }
+      })
+      return { ...state, cars, cells }
+    }
+    case MOVE_RIGHT: {
+      let cells = cellsDeepCopy(state.cells);
+      let cars = carsDeepCopy(state.cars);
+
+      const { row, col, size, direction } = action.car;
+      if (row === undefined || col === undefined || col > 4 || size === undefined ||
+        (direction !== 'H' && direction !== 'V')) {
+        return state;
+      }
+
+      for (let tail = col + size - 1; tail >= col; --tail) {
+        if (direction === 'H') {
+          if (cells[row][tail + 1].occupied) {
+            return state;
+          }
+          cells[row][tail].occupied = false;
+          cells[row][tail + 1].occupied = true;
+        }
+      }
+
+      if (direction === 'V') {
+        for (let i = 0; i < size; ++i) {
+          if (cells[row + i][col + 1].occupied) {
+            return state;
+          }
+          cells[row + i][col].occupied = false;
+          cells[row + i][col + 1].occupied = true;
+        }
+      }
+
+      cars.forEach(car => {
+        if (car.selected) {
+          car.col += 1;
         }
       })
       return { ...state, cars, cells }
