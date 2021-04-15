@@ -210,7 +210,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
         }
         //release cells
         for (let tail = col + size - 1; tail >= col; --tail) {
-          if (cells[row][tail + 1].occupied) {
+          if (!cells[row] || !cells[row][tail + 1] || cells[row][tail + 1].occupied) {
             return state;
           }
           cells[row][tail].occupied = false;
@@ -234,7 +234,7 @@ const reducer = (state = { time: '', win: false, cars: [], cells: cellsInitialSt
           return state;
         }
         for (let i = 0; i < size; ++i) {
-          if (cells[row + i][col + 1].occupied) {
+          if (!cells[row + i] || cells[row + i][col + 1].occupied) {
             return state;
           }
           cells[row + i][col].occupied = false;
