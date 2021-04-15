@@ -172,7 +172,7 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
       let cells = cellsDeepCopy(state.cells);
       let cars = carsDeepCopy(state.cars);
 
-      const { row, col, size, direction } = action.car;
+      const { row, col, size, direction, name } = action.car;
       if (direction === 'H') {
         if (row === undefined || col === undefined || col > 4 || size === undefined) {
           return state;
@@ -183,7 +183,7 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
           for (let i = col; i <= size + col - 1; ++i) {
             cells[row][i].occupied = false;
           }
-          return { ...state, cells, cars, win: true };
+          return { ...state, cells, cars, win: name === 'red' };
         }
         //release cells
         for (let tail = col + size - 1; tail >= col; --tail) {
@@ -196,7 +196,7 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
         }
       } else if (direction === 'V') {
         //Winner senario
-        if (col === 5 && (row === 2 || row === 3)) {
+        if (col === 5 && row === 2) {
           if (size >= 3) {
             return state;
           }
@@ -204,7 +204,7 @@ const reducer = (state = { win: false, cars: [], cells: cellsInitialState }, act
           for (let i = 0; i < size; ++i) {
             cells[row + i][col].occupied = false;
           }
-          return { ...state, win: true, cars, cells }
+          return { ...state, win: name === 'red', cars, cells }
         }
         //release cells
         if (col === 5) {
